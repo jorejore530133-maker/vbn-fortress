@@ -9,7 +9,38 @@ jobs:
   build:
     runs-on: ubuntu-22.04
 
+    steps:name: Build Android APK
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
     steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    - name: Build APK (Debug)
+      run: ./bat assembleDebug  # أو استخدام ./gradlew assembleRelease إذا كان لديك مفتاح توقيع
+
+    - name: Upload APK artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: app-debug-apk
+        path: app/build/outputs/apk/debug/app-debug.apk
+
       - name: Checkout code
         uses: actions/checkout@v4
 
